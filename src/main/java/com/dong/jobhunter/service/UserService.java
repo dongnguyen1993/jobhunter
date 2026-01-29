@@ -5,6 +5,9 @@ import com.dong.jobhunter.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 public class UserService {
 
     UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
 
     public List<User> getUser() {
         return userRepository.findAll();
@@ -29,7 +33,7 @@ public class UserService {
         User user = new User();
         user.setEmail(userRequest.getEmail());
         user.setName(userRequest.getName());
-        user.setPassword(userRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         userRepository.save(user);
 
